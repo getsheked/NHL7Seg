@@ -12,6 +12,7 @@ data=json.loads(response.text)
 response=requests.get("https://api-web.nhle.com/v1/club-schedule-season/MIN/now")
 shedData=json.loads(response.text)
 today=date.today().strftime("%Y-%m-%d")
+today=("2023-12-13")
 i2c=busio.I2C(board.SCL,board.SDA)
 display1=segments.Seg7x4(i2c,address=0x70)
 display2=segments.Seg7x4(i2c,address=0x72)
@@ -24,7 +25,7 @@ GPIO.setwarnings(False)
 GPIO.setup(23,GPIO.OUT)
 GPIO.setup(24,GPIO.OUT)
 GPIO.setup(25,GPIO.OUT)
-
+GPIO.setup(26,GPIO.OUT)
 def gameday():
     game=None
     n=82
@@ -106,12 +107,20 @@ def LEDcont():
         GPIO.output(23,GPIO.HIGH)
         GPIO.output(24,GPIO.LOW)
         GPIO.output(25,GPIO.LOW)
+        GPIO.output(26,GPIO.LOW)
     elif(period()==2):
         GPIO.output(23,GPIO.LOW)
         GPIO.output(24,GPIO.HIGH)
         GPIO.output(25,GPIO.LOW)
+        GPIO.output(26,GPIO.LOW)
     elif(period()==3):
         GPIO.output(23,GPIO.LOW)
         GPIO.output(24,GPIO.LOW)
         GPIO.output(25,GPIO.HIGH)
+        GPIO.output(26,GPIO.LOW)
+    elif(period()>=4):
+        GPIO.output(23,GPIO.LOW)
+        GPIO.output(24,GPIO.LOW)
+        GPIO.output(25,GPIO.LOW)
+        GPIO.output(26,GPIO.HIGH)
     
