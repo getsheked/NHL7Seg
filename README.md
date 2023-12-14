@@ -5,3 +5,7 @@ also i cant spell
 
 Current Issues:
   Anything relating to OT or Shootouts
+
+Future Features:
+  Choosing Team: Right now the team name is hardcoded, I am planing on making a it a changeable thing though the command line.
+  
