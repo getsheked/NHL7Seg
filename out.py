@@ -10,5 +10,5 @@ while 0<10:
 		pTime()
 		pScore()
 		LEDcont()
-		
+	allOff()
 		

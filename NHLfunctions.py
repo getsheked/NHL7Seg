@@ -122,7 +122,12 @@ def LEDcont():
         GPIO.output(24,GPIO.LOW)
         GPIO.output(25,GPIO.LOW)
         GPIO.output(26,GPIO.HIGH)
-    elif(data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="FINAL" or data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="OFF")
+    if(data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="FINAL" or data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="OFF"):
+        GPIO.output(23,GPIO.LOW)
+        GPIO.output(24,GPIO.LOW)
+        GPIO.output(25,GPIO.LOW)
+        GPIO.output(26,GPIO.LOW)
+def allOff():
         GPIO.output(23,GPIO.LOW)
         GPIO.output(24,GPIO.LOW)
         GPIO.output(25,GPIO.LOW)
