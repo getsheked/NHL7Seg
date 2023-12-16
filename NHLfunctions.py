@@ -84,7 +84,6 @@ def period():
 def pTime():
     gameNumVal=homeAway()[2]
     gameDateVal=homeAway()[1]
-   
     if(data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="FINAL" or data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="OFF"):
         if(period()==4):
             display1.print(" FOT")
@@ -102,31 +101,17 @@ def pTime():
 def pScore():
     display2.print(str(MNscore())+"  "+str(otherScore()))
 def LEDcont():
+    allOff()
     if(period()==1):
         GPIO.output(23,GPIO.HIGH)
-        GPIO.output(24,GPIO.LOW)
-        GPIO.output(25,GPIO.LOW)
-        GPIO.output(26,GPIO.LOW)
     elif(period()==2):
-        GPIO.output(23,GPIO.LOW)
         GPIO.output(24,GPIO.HIGH)
-        GPIO.output(25,GPIO.LOW)
-        GPIO.output(26,GPIO.LOW)
     elif(period()==3):
-        GPIO.output(23,GPIO.LOW)
-        GPIO.output(24,GPIO.LOW)
         GPIO.output(25,GPIO.HIGH)
-        GPIO.output(26,GPIO.LOW)
     elif(period()>=4):
-        GPIO.output(23,GPIO.LOW)
-        GPIO.output(24,GPIO.LOW)
-        GPIO.output(25,GPIO.LOW)
         GPIO.output(26,GPIO.HIGH)
     if(data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="FINAL" or data['gamesByDate'][gameDateVal]['games'][gameNumVal]['gameState']=="OFF"):
-        GPIO.output(23,GPIO.LOW)
-        GPIO.output(24,GPIO.LOW)
-        GPIO.output(25,GPIO.LOW)
-        GPIO.output(26,GPIO.LOW)
+        allOff()
 def allOff():
         GPIO.output(23,GPIO.LOW)
         GPIO.output(24,GPIO.LOW)
