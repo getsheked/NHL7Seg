@@ -9,7 +9,6 @@ import busio
 
 today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
-date1="2024-11-19"
 url='https://api-web.nhle.com'
 i2c= busio.I2C(board.SCL, board.SDA)
 display=segments.Seg7x4(i2c, address=0x72)
@@ -21,52 +20,48 @@ GPIO.setup(14,GPIO.OUT)
 GPIO.setup(15,GPIO.OUT)
 GPIO.setup(18,GPIO.OUT)
 GPIO.setup(23,GPIO.OUT)
-
-def handshake():
-    endpoint="/v1/score/now"
+endpoint="/v1/scoreboard/now"
+response = requests.get(url+endpoint) 
+endpoint = "/v1/club-schedule-season/MIN/20242025"  
+response1 = requests.get(url + endpoint)
+def refresh():
+    endpoint="/v1/scoreboard/now"
     response = requests.get(url+endpoint)  
+    endpoint = "/v1/club-schedule-season/MIN/20242025"  
+    response1 = requests.get(url + endpoint)
+def handshake():
     if response.status_code == 200:
         data = response.json()
         return "success" 
     else:
         return "fail"
 def gameNum():
-    endpoint= "/v1/scoreboard/now"
-    response=requests.get(url+endpoint)
     x=len(response.json()["gamesByDate"][getDate()]["games"])
-    for i in range(0,x-1):
+    for i in range(0,x):
         if response.json()["gamesByDate"][getDate()]["games"][i]["id"] == ID():
             return i
+    
 def getDate():
-    endpoint="/v1/scoreboard/now"
-    response=requests.get(url+endpoint)
     for i in range(0,6):
-        if date1== response.json()["gamesByDate"][i]["date"]:
+        if str(date1)== response.json()["gamesByDate"][i]["date"]:
             return i
 def ID():
-    endpoint = "/v1/club-schedule-season/MIN/20242025"
-    response = requests.get(url + endpoint)
     for i in range(0,86):
-        if date1 == response.json()["games"][i]["gameDate"]:
-            return response.json()["games"][i]["id"]
+        if date1 == response1.json()["games"][i]["gameDate"]:
+            return response1.json()["games"][i]["id"]
             break
 def game():
     x=getDate()
-    endpoint = "/v1/scoreboard/now"
-    response= requests.get(url+endpoint)
     for i in range(0,x+1):
         if response.json()["gamesByDate"][getDate()]["games"][i]["id"]==ID():
             return i
 def homeAway():
-    endpoint="/v1/scoreboard/now"
-    response=requests.get(url+endpoint)
     x=game()
     if response.json()["gamesByDate"][getDate()]["games"][x]["homeTeam"]["id"]==30:
         return 1
     elif response.json()["gamesByDate"][getDate()]["games"][x]["awayTeam"]["id"]==30:
         return 2
 def source():  
-    response=requests.get(url+"/v1/scoreboard/now")
     return response.json()["gamesByDate"][getDate()]["games"][gameNum()]
 def MINScore():
     if source()["gameState"]!="FUT":
@@ -92,26 +87,27 @@ def period():
     if source()["gameState"]!="FUT":
         return source()["periodDescriptor"]["number"]
 def periodCont():
-    if period()==1:
-        GPIO.output(14,GPIO.HIGH)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.LOW)
-    elif period()==2:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.HIGH)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.LOW)
-    elif period()==3:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.HIGH)
-        GPIO.output(23,GPIO.LOW)
-    elif period()>=4:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.HIGH)
+    if period() is not None:
+        if period()==1:
+            GPIO.output(14,GPIO.HIGH)
+            GPIO.output(15,GPIO.LOW)
+            GPIO.output(18,GPIO.LOW)
+            GPIO.output(23,GPIO.LOW)
+        elif period()==2:
+            GPIO.output(14,GPIO.LOW)
+            GPIO.output(15,GPIO.HIGH)
+            GPIO.output(18,GPIO.LOW)
+            GPIO.output(23,GPIO.LOW)
+        elif period()==3:
+            GPIO.output(14,GPIO.LOW)
+            GPIO.output(15,GPIO.LOW)
+            GPIO.output(18,GPIO.HIGH)
+            GPIO.output(23,GPIO.LOW)
+        elif period()==4 or period()==5:
+            GPIO.output(14,GPIO.LOW)
+            GPIO.output(15,GPIO.LOW)
+            GPIO.output(18,GPIO.LOW)
+            GPIO.output(23,GPIO.HIGH)
 def allOff():
     GPIO.output(14,GPIO.LOW)  
     GPIO.output(15,GPIO.LOW)
@@ -128,13 +124,13 @@ def gameOver():
         elif period()==5:
             display.print("F/SO")
             return True
+        else:
+            return False
 def timeTilNxt():
-    endpoint="/v1/club-schedule-season/MIN/20242025"
-    response=requests.get(url+endpoint)
     for i in range(0,88):
-        date2=response.json()["games"][i]["gameDate"]
+        date2=response1.json()["games"][i]["gameDate"]
         '''date2=datetime.datetime.strptime(date2,"%Y-%m-%d %H:%M:%S")'''
-        test=response.json()["games"][i]["startTimeUTC"]
+        test=response1.json()["games"][i]["startTimeUTC"]
         testsub1=test[:10]
         testsub2=test[11:19]
         test=testsub1+" "+testsub2
@@ -143,9 +139,4 @@ def timeTilNxt():
         x=cenTest-datetime.datetime.now()
         if x<datetime.timedelta(hours=12) and x>datetime.timedelta(seconds=-1):
             return True
-
-
-print(ID())
-print(game())
-print(gameNum())
-print(getDate())
+    
