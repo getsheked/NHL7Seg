@@ -129,19 +129,35 @@ def oneCall():
         else:
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
-    ident=0
+    i=gameConDate()
+    display2.marquee("Next Game ",0.5,False)
+    print(i)
+    string=response1.json()["games"][i]["gameDate"]
+    print(string)
+    p1=string[5:7]
+    p2=string[8:10]
+    display2.marquee(p1+"."+p2+" At "+gameConTime(),0.5,False)
+def gameConDate():
     date1=datetime.date.today()
     for y in range(0,7):
-        change=datetime.timedelta(days=y,)
+        change=datetime.timedelta(days=y)
         date2=date1+change
         for i in range(0,88):
             x=response1.json()["games"][i]["gameDate"]
             if x == datetime.datetime.strftime(date2,"%Y-%m-%d")[:11]:
-                indent=i
-                break
-    display2.marquee("Next Game ",0.5,False)
-    string=response1.json()["games"][i]["gameDate"]
-    p1=string[7:8]
-    p2="ass"
-    display2.marquee(p1+"."+p2,0.5,False)
-    
+                return i
+def gameConTime():
+    i=gameConDate()
+    test=response1.json()["games"][i]["startTimeUTC"]
+    testsub1=test[:10]
+    testsub2=test[11:19]
+    test=testsub1+" "+testsub2
+    ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
+    cenTest=ttime-datetime.timedelta(hours=6)
+    cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
+    fig2=cenTest[14:16]
+    if int(cenTest[11:13]) >12:
+        fig1=int(cenTest[11:13])-12
+        return str(fig1)+":"+str(fig2)+" PM"
+    else:
+        return str(cenTest[11:13])+" AM"
