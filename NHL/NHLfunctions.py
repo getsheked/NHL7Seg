@@ -142,6 +142,6 @@ def noGameControl():
     display2.marquee("Next Game ",0.5,False)
     string=response1.json()["games"][i]["gameDate"]
     p1=string[7:8]
-    p2=string[6:7]
+    p2="ass"
     display2.marquee(p1+"."+p2,0.5,False)
     
