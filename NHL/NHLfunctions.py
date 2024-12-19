@@ -17,8 +17,8 @@ today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
 url='https://api-web.nhle.com'
 i2c= busio.I2C(board.SCL, board.SDA)
-display=segments.Seg7x4(i2c, address=0x72)
-display2=segments.Seg14x4(i2c,address=0x70)
+display=segments.Seg7x4(i2c, address=0x74)
+display2=segments.Seg14x4(i2c,address=0x73)
 display.fill(0)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -155,9 +155,12 @@ def gameConTime():
     ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
     cenTest=ttime-datetime.timedelta(hours=6)
     cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
+    
     fig2=cenTest[14:16]
+   
+   
     if int(cenTest[11:13]) >12:
         fig1=int(cenTest[11:13])-12
-        return str(fig1)+":"+str(fig2)+" PM"
-    else:
+        return str(fig1)+"."+str(fig2)+" PM"
+    else:        
         return str(cenTest[11:13])+" AM"
