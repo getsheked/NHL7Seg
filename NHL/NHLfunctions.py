@@ -192,4 +192,4 @@ def gameConTime():
         return str(fig1)+"."+str(fig2)+" PM"
     else:        
         return str(cenTest[11:13])+" AM"
-noGameControl()
+
