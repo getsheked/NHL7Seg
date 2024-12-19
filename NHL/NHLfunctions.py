@@ -6,30 +6,45 @@ from adafruit_ht16k33 import segments
 import time
 import board
 import busio
-
-
-x="MIN"
-num=30
+from configparser import ConfigParser
 
 
 
+
+
+
+
+
+
+#config setup
+
+config=ConfigParser()
+config.read('config.ini')
 today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
+x=config.get('team','teamABV')
+num=config.get('team','teamID')
+tzoffset=config.get('time','zone')
+#api setup
+
 url='https://api-web.nhle.com'
-i2c= busio.I2C(board.SCL, board.SDA)
-display=segments.Seg7x4(i2c, address=0x74)
-display2=segments.Seg14x4(i2c,address=0x73)
-display.fill(0)
+endpoint="/v1/scoreboard/now"
+response = requests.get(url+endpoint) 
+endpoint = "/v1/club-schedule-season/"+x+"/20242025"  
+response1 = requests.get(url + endpoint)
+
+# hardware setup
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(14,GPIO.OUT)
 GPIO.setup(15,GPIO.OUT)
 GPIO.setup(18,GPIO.OUT)
 GPIO.setup(23,GPIO.OUT)
-endpoint="/v1/scoreboard/now"
-response = requests.get(url+endpoint) 
-endpoint = "/v1/club-schedule-season/"+x+"/20242025"  
-response1 = requests.get(url + endpoint)
+i2c= busio.I2C(board.SCL, board.SDA)
+display=segments.Seg7x4(i2c, address=0x74)
+display2=segments.Seg14x4(i2c,address=0x73)
+display.fill(0)
 
 def handshake():
     if response.status_code == 200:
@@ -130,13 +145,27 @@ def oneCall():
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
     i=gameConDate()
+    if response1.json()['games'][i]['homeTeam']['id']==30:
+        site="Vs"
+        other=response1.json()['games'][i]['awayTeam']['abbrev']
+    else:
+        site="At"
+        other=response1.json()['games'][i]['homeTeam']['abbrev']
+    if response1.json()['games'][i-1]['homeTeam']['id']==30:
+        other2=response1.json()['games'][i-1]['awayTeam']['abbrev']
+        OtherScore=response1.json()['games'][i-1]['awayTeam']['score']
+        MNScore=response1.json()['games'][i-1]['homeTeam']['score']
+    else:
+        OtherScore=response1.json()['games'][i-1]['homeTeam']['score']
+        other2=response1.json()['games'][i-1]['homeTeam']['abbrev']
+        MNScore=response1.json()['games'][i-1]['awayTeam']['score']
+    print(site)
     display2.marquee("Next Game ",0.5,False)
-    print(i)
     string=response1.json()["games"][i]["gameDate"]
-    print(string)
     p1=string[5:7]
     p2=string[8:10]
-    display2.marquee(p1+"."+p2+" At "+gameConTime(),0.5,False)
+    display2.marquee(p1+"."+p2+" At "+gameConTime()+" "+site+" "+other,0.5,False)
+    display2.marquee("Last Game MIN "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
 def gameConDate():
     date1=datetime.date.today()
     for y in range(0,7):
@@ -153,14 +182,14 @@ def gameConTime():
     testsub2=test[11:19]
     test=testsub1+" "+testsub2
     ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
-    cenTest=ttime-datetime.timedelta(hours=6)
+    cenTest=ttime-datetime.timedelta(hours=int(tzoffset))
     cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
     
     fig2=cenTest[14:16]
-   
    
     if int(cenTest[11:13]) >12:
         fig1=int(cenTest[11:13])-12
         return str(fig1)+"."+str(fig2)+" PM"
     else:        
         return str(cenTest[11:13])+" AM"
+noGameControl()
