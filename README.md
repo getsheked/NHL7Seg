@@ -12,9 +12,13 @@ Setup:
      
       3. 
     
-      4. 
-   
-      5. Setup config file, enter your teams abbrev and ID in the file. 
+      4. Setup Config Timezone
+           Eastern: 5
+           Central: 6
+           Mountian: 7
+           Pacific: 8
+          For another time zone, enter the utc offset, currently it only works for areas with negative utc offsets. 
+      5. Setup teams in config file, enter your teams abbrev and ID in the file. 
         Anaheim Ducks: ANA 24
         Boston Bruins: BOS 6
         Buffalo Sabers: BUF 7
