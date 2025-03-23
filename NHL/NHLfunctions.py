@@ -16,6 +16,7 @@ today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
 x=config.get('team','teamABV')
 num=config.get('team','teamID')
+num=int(num)
 tzoffset=config.get('time','zone')
 #api setup
 
@@ -84,43 +85,37 @@ def oneCall():
     for i in range(0,len(response.json()["gamesByDate"][gameDate]["games"])):
         if response.json()["gamesByDate"][gameDate]["games"][i]["id"]==gameID:
              gameNum=i
-    period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
-    if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
-        if period==3:
-            display2.print("F")
-        elif period==4:
-            display2.print("F/OT")
-        elif period==5:
-            display2.print("F/SO")
+    try:
+        period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
+        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
+            if period==3:
+                display2.print("F   ")
+            elif period==4:
+                display2.print("F/OT")
+            elif period==5:
+                display2.print("F/SO")
+        if period==1:
+            GPIO.output(14,GPIO.HIGH)
+        elif period==2:
+            GPIO.output(14,GPIO.LOW)
+            GPIO.output(15,GPIO.HIGH)
+        elif period==3:
+            GPIO.output(15,GPIO.LOW)
+            GPIO.output(18,GPIO.HIGH)
+        elif period==4 or period==5:
+            GPIO.output(18,GPIO.LOW)
+            GPIO.output(23,GPIO.HIGH)
+    except KeyError:
+        print("no period")
+        allOff()
     try:
         if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
             display2.print(response.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
     except KeyError:
         print("clock key error, no api time")
-    if period==1:
-        GPIO.output(14,GPIO.HIGH)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.LOW)
-    elif period==2:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.HIGH)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.LOW)
-    elif period==3:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.HIGH)
-        GPIO.output(23,GPIO.LOW)
-    elif period==4 or period==5:
-        GPIO.output(14,GPIO.LOW)
-        GPIO.output(15,GPIO.LOW)
-        GPIO.output(18,GPIO.LOW)
-        GPIO.output(23,GPIO.HIGH)
-    else:
-        allOff()
+   
     if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
-        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==int(num):
+        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
         else:
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
@@ -141,12 +136,12 @@ def noGameControl():
         other2=response1.json()['games'][i-1]['homeTeam']['abbrev']
         MNScore=response1.json()['games'][i-1]['awayTeam']['score']
     clock()
-    display2.marquee("Next Game ",0.5,False)
+    display.marquee("Next Game ",0.5,False)
     string=response1.json()["games"][i]["gameDate"]
     p1=string[5:7]
     p2=string[8:10]
-    display2.marquee(p1+"."+p2+" At "+gameConTime()+" "+site+" "+other,0.5,False)
-    display2.marquee("Last Game MIN "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
+    display.marquee(p1+"."+p2+" At "+gameConTime()+" "+site+" "+other,0.5,False)
+    display.marquee("Last Game MIN "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
 def gameConDate():
     date1=datetime.date.today()
     for y in range(0,7):
@@ -176,4 +171,4 @@ def gameConTime():
 
 def clock():
     x=datetime.datetime.now()
-    display.print(datetime.datetime.strftime(x,"%H:%M"))
+    display2.print(datetime.datetime.strftime(x,"%H:%M"))

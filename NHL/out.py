@@ -18,7 +18,7 @@ allOff()
 while 1<2:
 	print("RUNNING")
 	oneCall()
-	
+	noGameControl()
 	
 		
   
