@@ -14,8 +14,6 @@ display=segments.Seg14x4(i2c,address =0x73)
 display.fill(0)
 display2.fill(0)
 allOff()
-print(x)
-print(num)
 
 while 1<2:
 	print("RUNNING")
