@@ -9,17 +9,18 @@ import busio
 from NHLfunctions import *
 
 i2c= busio.I2C(board.SCL, board.SDA)
-display=segments.Seg7x4(i2c, address=0x74)
-display2=segments.Seg14x4(i2c,address =0x73)
+display2=segments.Seg7x4(i2c, address=0x74)
+display=segments.Seg14x4(i2c,address =0x73)
 display.fill(0)
 display2.fill(0)
 allOff()
+print(x)
+print(num)
+
 while 1<2:
 	print("RUNNING")
-	if timeTilNxt()==True:
-			oneCall()
-	else:
-		noGameControl()
+	oneCall()
+	
 	
 		
   

@@ -8,14 +8,6 @@ import board
 import busio
 from configparser import ConfigParser
 
-
-
-
-
-
-
-
-
 #config setup
 
 config=ConfigParser()
@@ -42,39 +34,30 @@ GPIO.setup(15,GPIO.OUT)
 GPIO.setup(18,GPIO.OUT)
 GPIO.setup(23,GPIO.OUT)
 i2c= busio.I2C(board.SCL, board.SDA)
-display=segments.Seg7x4(i2c, address=0x74)
-display2=segments.Seg14x4(i2c,address=0x73)
+display2=segments.Seg7x4(i2c, address=0x74)
+display=segments.Seg14x4(i2c,address=0x73)
 display.fill(0)
 
-def handshake():
-    if response.status_code == 200:
-        data = response.json()
-        return "success" 
-    else:
-        return "fail"
 def allOff():
     GPIO.output(14,GPIO.LOW)  
     GPIO.output(15,GPIO.LOW)
     GPIO.output(18,GPIO.LOW)
     GPIO.output(23,GPIO.LOW)
 def gameOver():
-    if source()["gameState"]=="FINAL" or "OFF" or "OVER" and not "LIVE" or "CRIT":
-        print(5)
+    if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]=="FINAL" or "OFF" or "OVER" and not "LIVE" or "CRIT":
         if period()==3:
-            display.print("F")
-            return True
+            display2.print("F")
         elif period()==4:
-            display.print("F/OT")
+            display2.print("F/OT")
             return True
         elif period()==5:
-            display.print("F/SO")
+            display2.print("F/SO")
             return True
     else:
         return False
 def timeTilNxt():
     for i in range(0,88):
         date2=response1.json()["games"][i]["gameDate"]
-        '''date2=datetime.datetime.strptime(date2,"%Y-%m-%d %H:%M:%S")'''
         test=response1.json()["games"][i]["startTimeUTC"]
         testsub1=test[:10]
         testsub2=test[11:19]
@@ -91,12 +74,10 @@ def oneCall():
     gameDate=0
     gameNum=0
     gameID=0
-    response = requests.get(url+"/v1/scoreboard/now") 
-    response2= requests.get(url+"/v1/club-schedule-season/"+x+"/20242025")
     
     for i in range(0,86):
-        if date1 == response2.json()["games"][i]["gameDate"]:
-            gameID= response2.json()["games"][i]["id"]
+        if date1 == response1.json()["games"][i]["gameDate"]:
+            gameID= response1.json()["games"][i]["id"]
     for i in range(0,6):
         if str(date1)== response.json()["gamesByDate"][i]["date"]:
             gameDate=i
@@ -106,11 +87,11 @@ def oneCall():
     period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
     if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
         if period==3:
-            display.print("F")
+            display2.print("F")
         elif period==4:
-            display.print("F/OT")
+            display2.print("F/OT")
         elif period==5:
-            display.print("F/SO")
+            display2.print("F/SO")
     try:
         if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
             display2.print(response.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
@@ -139,19 +120,19 @@ def oneCall():
     else:
         allOff()
     if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
-        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
+        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==int(num):
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
         else:
             display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
     i=gameConDate()
-    if response1.json()['games'][i]['homeTeam']['id']==30:
+    if response1.json()['games'][i]['homeTeam']['id']==num:
         site="Vs"
         other=response1.json()['games'][i]['awayTeam']['abbrev']
     else:
         site="At"
         other=response1.json()['games'][i]['homeTeam']['abbrev']
-    if response1.json()['games'][i-1]['homeTeam']['id']==30:
+    if response1.json()['games'][i-1]['homeTeam']['id']==num:
         other2=response1.json()['games'][i-1]['awayTeam']['abbrev']
         OtherScore=response1.json()['games'][i-1]['awayTeam']['score']
         MNScore=response1.json()['games'][i-1]['homeTeam']['score']
@@ -159,7 +140,7 @@ def noGameControl():
         OtherScore=response1.json()['games'][i-1]['homeTeam']['score']
         other2=response1.json()['games'][i-1]['homeTeam']['abbrev']
         MNScore=response1.json()['games'][i-1]['awayTeam']['score']
-    print(site)
+    clock()
     display2.marquee("Next Game ",0.5,False)
     string=response1.json()["games"][i]["gameDate"]
     p1=string[5:7]
@@ -193,3 +174,6 @@ def gameConTime():
     else:        
         return str(cenTest[11:13])+" AM"
 
+def clock():
+    x=datetime.datetime.now()
+    display.print(datetime.datetime.strftime(x,"%H:%M"))
