@@ -8,7 +8,7 @@ Setup:
      
       1. https://github.com/getsheked/NHL7Seg/blob/main/README.md
      
-      2. 
+      2. set if you want a 24hr or 12hr (AM/PM) Clock. set the paramater in config to 1 for 24hr and 0 for 12. 
      
       3. 
     
