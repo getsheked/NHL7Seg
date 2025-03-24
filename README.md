@@ -1,5 +1,4 @@
-
-I dont know whats really happening with this, but in time I hope it can turn into something cool. I will add the schematics for the pi and ciruits when i finish them.  
+First off, thanks for checking this out. I dont know whats really happening with this, but in time I hope it can turn into something cool. I will add the schematics for assosiated pi and ciruits when I finish them.  
 
 
 Setup: 
