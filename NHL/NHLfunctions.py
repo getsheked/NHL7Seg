@@ -18,6 +18,8 @@ x=config.get('team','teamABV')
 num=config.get('team','teamID')
 num=int(num)
 tzoffset=config.get('time','zone')
+timeFormat=config.get('time','24hr')
+timeFormat=int(timeFormat) 
 #api setup
 
 url='https://api-web.nhle.com'
@@ -72,9 +74,9 @@ def timeTilNxt():
     
 
 def oneCall():
-    gameDate=0
-    gameNum=0
-    gameID=0
+    gameDate=-1
+    gameNum=-1
+    gameID=-1
     
     for i in range(0,86):
         if date1 == response1.json()["games"][i]["gameDate"]:
@@ -85,40 +87,41 @@ def oneCall():
     for i in range(0,len(response.json()["gamesByDate"][gameDate]["games"])):
         if response.json()["gamesByDate"][gameDate]["games"][i]["id"]==gameID:
              gameNum=i
-    try:
-        period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
-        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
-            if period==3:
-                display2.print("F   ")
-            elif period==4:
-                display2.print("F/OT")
-            elif period==5:
-                display2.print("F/SO")
-        if period==1:
-            GPIO.output(14,GPIO.HIGH)
-        elif period==2:
-            GPIO.output(14,GPIO.LOW)
-            GPIO.output(15,GPIO.HIGH)
-        elif period==3:
-            GPIO.output(15,GPIO.LOW)
-            GPIO.output(18,GPIO.HIGH)
-        elif period==4 or period==5:
-            GPIO.output(18,GPIO.LOW)
-            GPIO.output(23,GPIO.HIGH)
-    except KeyError:
-        print("no period")
-        allOff()
-    try:
-        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
-            display2.print(response.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
-    except KeyError:
-        print("clock key error, no api time")
+    if gameDate == -1 or gameNum==-1 or gameID==-1:
+        try:
+            period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
+            if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
+                if period==3:
+                    display2.print("F   ")
+                elif period==4:
+                    display2.print("F/OT")
+                elif period==5:
+                    display2.print("F/SO")
+            if period==1:
+                GPIO.output(14,GPIO.HIGH)
+            elif period==2:
+                GPIO.output(14,GPIO.LOW)
+                GPIO.output(15,GPIO.HIGH)
+            elif period==3:
+                GPIO.output(15,GPIO.LOW)
+                GPIO.output(18,GPIO.HIGH)
+            elif period==4 or period==5:
+                GPIO.output(18,GPIO.LOW)
+                GPIO.output(23,GPIO.HIGH)
+        except KeyError:
+            print("no period")
+            allOff()
+        try:
+            if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
+                display2.print(response.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
+        except KeyError:
+            print("clock key error, no api time")
    
-    if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
-        if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
-            display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
-        else:
-            display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
+            if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
+                if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
+                    display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
+                else:
+                    display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
     i=gameConDate()
     if response1.json()['games'][i]['homeTeam']['id']==num:
@@ -160,15 +163,30 @@ def gameConTime():
     ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
     cenTest=ttime-datetime.timedelta(hours=int(tzoffset))
     cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
-    
     fig2=cenTest[14:16]
-   
-    if int(cenTest[11:13]) >12:
-        fig1=int(cenTest[11:13])-12
-        return str(fig1)+"."+str(fig2)+" PM"
-    else:        
-        return str(cenTest[11:13])+" AM"
-
+    print(cenTest[11:16])
+    if timeFormat != 1:
+        if int(cenTest[11:13]) >12:
+            fig1=int(cenTest[11:13])-12
+            return str(fig1)+"."+str(fig2)+" PM"
+        else:        
+            return cenTest[11:13]+"."+fig2+" AM"
+    else:  
+            return cenTest[11:13]+"."+fig2
 def clock():
     x=datetime.datetime.now()
-    display2.print(datetime.datetime.strftime(x,"%H:%M"))
+    y=datetime.datetime.strftime(x,"%H:%M")
+    if timeFormat != 1:
+        print(y[0:2])
+        if int(y[0:2])>12:
+            p=int(y[0:2])-12
+            y=" "+str(p)+":"+y[3:5]
+            display2.print(y)
+        else:
+            display2.print(y)
+    else:
+            display2.print(y)
+        
+
+#def totwelve(t)
+ #   time 
