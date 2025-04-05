@@ -87,7 +87,9 @@ def oneCall():
     for i in range(0,len(response.json()["gamesByDate"][gameDate]["games"])):
         if response.json()["gamesByDate"][gameDate]["games"][i]["id"]==gameID:
              gameNum=i
-    if gameDate == -1 or gameNum==-1 or gameID==-1:
+             
+    print(str(gameID)+" "+str(gameDate)+" "+str(gameNum));
+    if gameDate != -1 or gameNum !=-1 or gameID !=-1:
         try:
             period=response.json()["gamesByDate"][gameDate]["games"][gameNum]["period"] 
             if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] !="LIVE" or "CRIT":
@@ -112,16 +114,17 @@ def oneCall():
             print("no period")
             allOff()
         try:
-            if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
-                display2.print(response.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
+            response3 = requests.get("https://api-web.nhle.com/v1/scoreboard/now")
+            if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"] == "LIVE" or "CRIT":
+                display2.print(response3.json()["gamesByDate"][gameDate]["games"][gameNum]["clock"]["timeRemaining"])
         except KeyError:
             print("clock key error, no api time")
    
-            if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
-                if response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
-                    display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
-                else:
-                    display.print(str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
+        if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
+            if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
+                display.print(str(response3.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
+            else:
+                display.print(str(response3.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
     i=gameConDate()
     if response1.json()['games'][i]['homeTeam']['id']==num:
