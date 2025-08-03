@@ -8,6 +8,7 @@ import board
 import busio
 from NHLfunctions import *
 
+#hardware config
 i2c= busio.I2C(board.SCL, board.SDA)
 display2=segments.Seg7x4(i2c, address=0x74)
 display=segments.Seg14x4(i2c,address =0x73)
