@@ -14,18 +14,19 @@ config=ConfigParser()
 config.read('config.ini')
 today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
-x=config.get('team','teamABV')
+abrev=config.get('team','teamABV')
 num=config.get('team','teamID')
 num=int(num)
-tzoffset=config.get('time','zone')
+tzone=config.get('time','zone')
 timeFormat=config.get('time','24hr')
 timeFormat=int(timeFormat) 
+season=config.get('time','season')
 #api setup
 
 url='https://api-web.nhle.com'
 endpoint="/v1/scoreboard/now"
 response = requests.get(url+endpoint) 
-endpoint = "/v1/club-schedule-season/"+x+"/20242025"  
+endpoint = "/v1/club-schedule-season/"+abrev+"/"+season  
 response1 = requests.get(url + endpoint)
 
 # hardware setup
@@ -47,6 +48,7 @@ def allOff():
     GPIO.output(18,GPIO.LOW)
     GPIO.output(23,GPIO.LOW)
 def gameOver():
+
     if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]=="FINAL" or "OFF" or "OVER" and not "LIVE" or "CRIT":
         if period()==3:
             display2.print("F")
@@ -62,11 +64,9 @@ def timeTilNxt():
     for i in range(0,88):
         date2=response1.json()["games"][i]["gameDate"]
         test=response1.json()["games"][i]["startTimeUTC"]
-        testsub1=test[:10]
-        testsub2=test[11:19]
-        test=testsub1+" "+testsub2
+        test=test[:10]+" "+test[11:19]
         ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
-        cenTest=ttime-datetime.timedelta(hours=6)
+        cenTest=ttime-datetime.timedelta(hours=tzone)
         x=cenTest-datetime.datetime.now()
         if x<datetime.timedelta(hours=1) and x>datetime.timedelta(seconds=-1):
             return True
@@ -147,7 +147,7 @@ def noGameControl():
     p1=string[5:7]
     p2=string[8:10]
     display.marquee(p1+"."+p2+" At "+gameConTime()+" "+site+" "+other,0.5,False)
-    display.marquee("Last Game MIN "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
+    display.marquee("Last Game "+abrev+" "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
 def gameConDate():
     date1=datetime.date.today()
     for y in range(0,7):
@@ -164,7 +164,7 @@ def gameConTime():
     testsub2=test[11:19]
     test=testsub1+" "+testsub2
     ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
-    cenTest=ttime-datetime.timedelta(hours=int(tzoffset))
+    cenTest=ttime-datetime.timedelta(hours=int(tzone))
     cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
     fig2=cenTest[14:16]
     print(cenTest[11:16])

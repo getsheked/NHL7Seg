@@ -5,17 +5,15 @@ Setup:
      
       1. https://github.com/getsheked/NHL7Seg/blob/main/README.md
      
-      2. set if you want a 24hr or 12hr (AM/PM) Clock. set the paramater in config to 1 for 24hr and 0 for 12. 
-     
-      3. 
+      2. Set if you want a 24hr or 12hr (AM/PM) clock. Set the paramater in config to 1 for 24hr and 0 for 12. 
     
       4. Setup Config Timezone
-           Eastern: 5
-           Central: 6
-           Mountian: 7
-           Pacific: 8
-          For another time zone, enter the utc offset, currently it only works for areas with negative utc offsets. 
-      5. Setup teams in config file, enter your teams abbrev and ID in the file. 
+        Enter the UTC (Coordinated Universal Time) offset. For North America, this is usually -5 for EST, -6 for CST, -7 for MST, and -8 for PST.
+        If you are in a different timezone, you can find your offset here: https://www.timeanddate.com/time/map/ 
+        Make sure to check for any daylight savings time changes, as these will affect your offset.
+      
+      5. Setup teams in config file. 
+        Enter the team you want to track and show up on the scoreboard in the config file. 
         Anaheim Ducks: ANA 24
         Boston Bruins: BOS 6
         Buffalo Sabers: BUF 7
@@ -49,7 +47,7 @@ Setup:
         Washington Capitals: WSH 15
         Winnipeg Jets: WPG 52
         
-
+    6. Please report any issues you find with the program, there are likely many. 
 
 This project relies on work fromm ADAFRUIT, and ZMALSKI. Thank you to both for your indirect assistance
 
