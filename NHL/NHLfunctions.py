@@ -15,8 +15,8 @@ config.read('config.ini')
 today = datetime.date.today()
 date1=today.strftime("%Y-%m-%d")
 abrev=config.get('team','teamABV')
-num=config.get('team','teamID')
-num=int(num)
+teamID=config.get('team','teamID')
+teamID=int(teamID)
 tzone=config.get('time','zone')
 timeFormat=config.get('time','24hr')
 timeFormat=int(timeFormat) 
@@ -47,27 +47,17 @@ def allOff():
     GPIO.output(15,GPIO.LOW)
     GPIO.output(18,GPIO.LOW)
     GPIO.output(23,GPIO.LOW)
-def gameOver():
-
-    if response.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]=="FINAL" or "OFF" or "OVER" and not "LIVE" or "CRIT":
-        if period()==3:
-            display2.print("F")
-        elif period()==4:
-            display2.print("F/OT")
-            return True
-        elif period()==5:
-            display2.print("F/SO")
-            return True
-    else:
-        return False
 def timeTilNxt():
     for i in range(0,88):
         date2=response1.json()["games"][i]["gameDate"]
         test=response1.json()["games"][i]["startTimeUTC"]
-        test=test[:10]+" "+test[11:19]
-        ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
-        cenTest=ttime-datetime.timedelta(hours=tzone)
-        x=cenTest-datetime.datetime.now()
+        ttime=datetime.datetime.strptime(test[:10]+" "+test[11:19],"%Y-%m-%d %H:%M:%S")
+        if(tzone > 0):
+              tzoneadj=ttime+datetime.timedelta(hours=tzone)
+              x=tzoneadj+datetime.datetime.now()
+        else: 
+              tzoneadj=ttime-datetime.timedelta(hours=abs(tzone))
+              x=tzoneadj-datetime.datetime.now()
         if x<datetime.timedelta(hours=1) and x>datetime.timedelta(seconds=-1):
             return True
     return False
@@ -121,19 +111,19 @@ def oneCall():
             print("clock key error, no api time")
    
         if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["gameState"]!="FUT":
-            if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==num:
+            if response3.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["id"]==teamID:
                 display.print(str(response3.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"]))
             else:
                 display.print(str(response3.json()["gamesByDate"][gameDate]["games"][gameNum]["awayTeam"]["score"])+"  "+str(response.json()["gamesByDate"][gameDate]["games"][gameNum]["homeTeam"]["score"]))
 def noGameControl():
     i=gameConDate()
-    if response1.json()['games'][i]['homeTeam']['id']==num:
+    if response1.json()['games'][i]['homeTeam']['id']==teamID:
         site="Vs"
         other=response1.json()['games'][i]['awayTeam']['abbrev']
     else:
         site="At"
         other=response1.json()['games'][i]['homeTeam']['abbrev']
-    if response1.json()['games'][i-1]['homeTeam']['id']==num:
+    if response1.json()['games'][i-1]['homeTeam']['id']==teamID:
         other2=response1.json()['games'][i-1]['awayTeam']['abbrev']
         OtherScore=response1.json()['games'][i-1]['awayTeam']['score']
         MNScore=response1.json()['games'][i-1]['homeTeam']['score']
@@ -144,9 +134,7 @@ def noGameControl():
     clock()
     display.marquee("Next Game ",0.5,False)
     string=response1.json()["games"][i]["gameDate"]
-    p1=string[5:7]
-    p2=string[8:10]
-    display.marquee(p1+"."+p2+" At "+gameConTime()+" "+site+" "+other,0.5,False)
+    display.marquee(string[5:7]+"."+string[8:10]+" At "+gameConTime()+" "+site+" "+other,0.5,False)
     display.marquee("Last Game "+abrev+" "+str(MNScore)+" "+other2+" "+str(OtherScore), 0.5,False)
 def gameConDate():
     date1=datetime.date.today()
@@ -160,25 +148,24 @@ def gameConDate():
 def gameConTime():
     i=gameConDate()
     test=response1.json()["games"][i]["startTimeUTC"]
-    testsub1=test[:10]
-    testsub2=test[11:19]
-    test=testsub1+" "+testsub2
-    ttime=datetime.datetime.strptime(test,"%Y-%m-%d %H:%M:%S")
-    cenTest=ttime-datetime.timedelta(hours=int(tzone))
-    cenTest=datetime.datetime.strftime(cenTest,"%Y-%m-%d %H:%M:%S")
-    fig2=cenTest[14:16]
-    print(cenTest[11:16])
+    adjtime=datetime.datetime.strptime(test[:10]+" "+test[11:19],"%Y-%m-%d %H:%M:%S")
+    if(tzone > 0):
+         tzoneadj=adjtime+datetime.timedelta(hours=tzone)
+         x=tzoneadj+datetime.datetime.now()
+    else: 
+         tzoneadj=adjtime-datetime.timedelta(hours=abs(tzone))
+         x=tzoneadj-datetime.datetime.now()
+    fig2=tzoneadj[14:16]
     if timeFormat != 1:
-        if int(cenTest[11:13]) >12:
-            fig1=int(cenTest[11:13])-12
+        if int(tzoneadj[11:13]) >12:
+            fig1=int(tzoneadj[11:13])-12
             return str(fig1)+"."+str(fig2)+" PM"
         else:        
-            return cenTest[11:13]+"."+fig2+" AM"
+            return tzoneadj[11:13]+"."+fig2+" AM"
     else:  
-            return cenTest[11:13]+"."+fig2
+            return tzoneadj[11:13]+"."+fig2
 def clock():
-    x=datetime.datetime.now()
-    y=datetime.datetime.strftime(x,"%H:%M")
+    y=datetime.datetime.strftime(datetime.datetime.now(),"%H:%M")
     if timeFormat != 1:
         print(y[0:2])
         if int(y[0:2])>12:
@@ -190,6 +177,3 @@ def clock():
     else:
             display2.print(y)
         
-
-#def totwelve(t)
- #   time 
