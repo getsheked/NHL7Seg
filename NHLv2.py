@@ -44,7 +44,7 @@ config.read('config.ini')
 today = datetime.date.today()
 date=today.strftime("%Y-%m-%d")
 abrev=config.get('team','teamABV')
-#teamID=int(config.get('team','teamID'))
+teamID=int(config.get('team','teamID'))
 tzone=config.get('time','zone')
 timeFormat=int(config.get('time','24hr'))
 season=config.get('time','season')
@@ -60,7 +60,7 @@ def retriveScheduleJSON():
   x=requests.get("https://api-web.nhle.com/v1/club-schedule-season/"+abrev+"/"+season)
   return x.json()
 def retriveScoreboardJSON(x):
-    y=requests.get("https://api-web.nhle.com/v1/gamecenter/"+x+"/boxscore")
+    y=requests.get("https://api-web.nhle.com/v1/gamecenter/"+str(x)+"/boxscore")
     return y.json()
 def InfoFinder():#make better adjust for more games/playoffs
    testtime=datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
@@ -90,18 +90,12 @@ def DisplayDate():
        DateCode="%A, %B %e"
     else: DateCode="%A,%e %B"
     return datetime.datetime.now().strftime(DateCode)
-def getScoreTime():
- x
-
-def getNextGame(): 
-    return string  
-def getLastGame():
-    return string   
 def getGameInformation():
-   if InfoFinder()[0]==True:
+    
+   if 1==1:#InfoFinder()[0]==True:
        gameID=InfoFinder()[1]
-       y=retriveScoreboardJSON(gameID)
-       period=y["periodDescriptor"]["period"]
+       y=retriveScoreboardJSON(2023020204)
+       period=y["periodDescriptor"]["number"]
        if y["clock"]["InIntermission"]== "True":
             period = "Int"
        elif period <=3:
@@ -111,6 +105,31 @@ def getGameInformation():
        elif period == 5:
             period="SO"       
        gameState=y["gameState"]
+       if y["homeTeam"]==abrev:
+             favScore=y["homeTeam"]["score"]
+             favShots= y["homeTeam"]["sog"]
+             otherScore=y["awayTeam"]["score"]
+             otherShots= y["awayTeam"]["sog"]
+             otherID= y["awayTeam"]["abbrev"]
+       else: 
+           favScore=y["awayTeam"]["score"]
+           favShots= y["awayTeam"]["sog"]
+           otherScore=y["homeTeam"]["score"]
+           otherShots= y["homeTeam"]["sog"]
+           otherID=y["homeTeam"]["abbrev"]
+       if gameState != "OFF" or "FUT":
+              if period != "SO":
+                gameTime=y["clock"]["timeRemaining"]
+                gameON= True
+              else: gameON= False
+       else: gameTime= 0
+       return gameON, gameState, period, gameTime, favScore, favShots, otherID, otherScore, otherShots
+   else: return 0
+
+              
+
+
+
 
 # do this during the game 
 #do this right before the game 
@@ -118,7 +137,6 @@ def getGameInformation():
 #do this between games 
 
 def setup():
-   
    print("Do you need to change settings? (Y/N)")
    if input()=="Y" or "y":
       print("Enter 3 Letter Team Abreveation")
@@ -132,12 +150,13 @@ def setup():
       timeData["season"]=str(y.json()[len(y.json())-1])
       print("Enter Date Format (M for Weekday, Month Day)(D for Weekday, Day Month)")
       timeData["SecondDigit"]=input().upper()
-      with open('config.ini', 'w') as conf:
-        config.write(conf)
       with open('teamAbrevList.json', 'r') as teams:
         teams=json.load(teams)
-        teamID=teams[abrev]["ID"]
-        teamData["teamid"]=str(teamID)
+      teamID=teams[abrev]["ID"]
+      teamData=config["team"]
+      teamData["teamid"]=str(teamID)
+      with open('config.ini', 'w') as conf:
+        config.write(conf)         
 
 setup()
-         
+print(getGameInformation())
