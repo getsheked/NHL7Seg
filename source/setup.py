@@ -8,7 +8,7 @@ from adafruit_ht16k33 import segments
 class boardcontrols:
     i2c = busio.I2C(board.SCL, board.SDA)
     config=ConfigParser()
-    config.read('config.ini')
+    config.read('../config.ini')
     today = datetime.date.today()
     date1=today.strftime("%Y-%m-%d")
     abrev=config.get('team','teamABV')
