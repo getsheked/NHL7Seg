@@ -19,7 +19,7 @@ class boardcontrols:
     GPIO.setup(23,GPIO.OUT) 
 class teaminfo:
     config=ConfigParser()
-    print(Path.cwd())
+    print(Path.cwd.parent())
     #config.read('config.ini')
    # teamID=int(config.get('team','teamID'))
    # tzone=config.get('time','zone')
