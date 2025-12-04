@@ -1,6 +1,8 @@
 import board
 import RPi.GPIO as GPIO
+import os
 import busio
+from pathlib import path
 import datetime
 from configparser import ConfigParser 
 from adafruit_ht16k33 import segments
@@ -17,9 +19,10 @@ class boardcontrols:
     GPIO.setup(23,GPIO.OUT) 
 class teaminfo:
     config=ConfigParser()
-    config.read('/home/paul/NHL7Seg/config.ini')
-    abrev=config.get('team','teamABV')
-    teamID=int(config.get('team','teamID'))
-    tzone=config.get('time','zone')
-    timeFormat=int(config.get('time','24hr'))
-    season=config.get('time','season')
+    path=path.parent()
+    print(path)
+   # config.read('/home/paul/NHL7Seg/config.ini')
+    #teamID=int(config.get('team','teamID'))
+    #tzone=config.get('time','zone')
+    #timeFormat=int(config.get('time','24hr'))
+    #season=config.get('time','season')
