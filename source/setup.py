@@ -2,7 +2,7 @@ import board
 import RPi.GPIO as GPIO
 import os
 import busio
-from pathlib import path
+from pathlib import Path
 import datetime
 from configparser import ConfigParser 
 from adafruit_ht16k33 import segments
