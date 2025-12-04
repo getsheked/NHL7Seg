@@ -19,7 +19,7 @@ class boardcontrols:
     GPIO.setup(23,GPIO.OUT) 
 class teaminfo:
     config=ConfigParser()
-    path=path.parent()
+    path=Path.parent()
     print(path)
    # config.read('/home/paul/NHL7Seg/config.ini')
     #teamID=int(config.get('team','teamID'))
