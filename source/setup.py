@@ -20,7 +20,7 @@ class boardcontrols:
 class teaminfo:
     config=ConfigParser()
     path=Path.cwd()
-    print(path.parent)
+    print(path)
    # config.read('/home/paul/NHL7Seg/config.ini')
     #teamID=int(config.get('team','teamID'))
     #tzone=config.get('time','zone')
