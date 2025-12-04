@@ -1,7 +1,7 @@
 import board
 import busio
 import datetime
-import configparser 
+from ConfigParser import configparser 
 from adafruit_ht16k33 import segments
 class board:
     i2c = busio.I2C(board.SCL, board.SDA)
