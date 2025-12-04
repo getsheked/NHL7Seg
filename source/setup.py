@@ -19,8 +19,8 @@ class boardcontrols:
     GPIO.setup(23,GPIO.OUT) 
 class teaminfo:
     config=ConfigParser()
-    path=Path.parent()
-    print(path)
+    path=Path.cwd()
+    print(path.parent)
    # config.read('/home/paul/NHL7Seg/config.ini')
     #teamID=int(config.get('team','teamID'))
     #tzone=config.get('time','zone')
