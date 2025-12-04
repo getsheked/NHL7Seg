@@ -1,11 +1,11 @@
 import board
 import busio
 import datetime
-from ConfigParser import configparser 
+import configparser 
 from adafruit_ht16k33 import segments
 class board:
     i2c = busio.I2C(board.SCL, board.SDA)
-    config=ConfigParser()
+    config=configparser()
     config.read('config.ini')
     today = datetime.date.today()
     date1=today.strftime("%Y-%m-%d")
