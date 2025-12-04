@@ -24,4 +24,4 @@ class boardcontrols:
     GPIO.setup(15,GPIO.OUT)
     GPIO.setup(18,GPIO.OUT)
     GPIO.setup(23,GPIO.OUT) 
-print(board.today)
+print(boardcontrols.today)
