@@ -20,8 +20,8 @@ class boardcontrols:
 class teaminfo:
     config=ConfigParser()
     print(Path.cwd())
-    config.read('config.ini')
-    teamID=int(config.get('team','teamID'))
-    tzone=config.get('time','zone')
-    timeFormat=int(config.get('time','24hr'))
-    season=config.get('time','season')
+    #config.read('config.ini')
+   # teamID=int(config.get('team','teamID'))
+   # tzone=config.get('time','zone')
+    #timeFormat=int(config.get('time','24hr'))
+    #season=config.get('time','season')
