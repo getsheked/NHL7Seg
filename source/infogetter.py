@@ -1,2 +1,2 @@
-import setup.teaminfo
-teaminfo=setup.teaminfo()
+from setup import teaminfo
+teaminfo=teaminfo()

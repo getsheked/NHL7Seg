@@ -27,8 +27,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 
-
-
 import json
 import requests
 import datetime
@@ -38,7 +36,6 @@ import time
 import board
 import busio
 from configparser import ConfigParser
-
 
 #config setup
 config=ConfigParser()
@@ -127,12 +124,6 @@ def getGameInformation():
        else: gameTime= 0
        return gameON, gameState, period, gameTime, favScore, favShots, otherID, otherScore, otherShots
    else: return 0
-
-              
-
-
-
-
 # do this during the game 
 #do this right before the game 
 #do this right after the game 
