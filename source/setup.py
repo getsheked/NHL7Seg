@@ -5,7 +5,7 @@ import datetime
 from configparser import ConfigParser 
 from adafruit_ht16k33 import segments
 
-class board:
+class boardcontrols:
     i2c = busio.I2C(board.SCL, board.SDA)
     config=ConfigParser()
     config.read('config.ini')
