@@ -1,11 +1,11 @@
 import json
 import requests
 import datetime
-#import RPi.GPIO as GPIO
-#from adafruit_ht16k33 import segments
+import RPi.GPIO as GPIO
+from adafruit_ht16k33 import segments
 import time
-#import board
-#import busio
+import board
+import busio
 from configparser import ConfigParser
 
 #config setup
