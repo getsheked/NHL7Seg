@@ -17,7 +17,7 @@ def ledcontroller(x):
     elif x==3:
         GPIO.output(15,GPIO.LOW)
         GPIO.output(18,GPIO.HIGH)
-    elif x==4 or period==5:
+    elif x==4 or x==5:
         GPIO.output(18,GPIO.LOW)
         GPIO.output(23,GPIO.HIGH)
         
@@ -32,4 +32,5 @@ def inGame(x):
     boardcontrols.display.print(x)
 def noGame(x,y):
     boardcontrols.display.marquee(x, 0.5,False)
+    boardcontrols.display.fill(0)
     boardcontrols.display.marquee(y, 0.5,False)

@@ -23,12 +23,11 @@ def nextGame(x):
     if offset[1]=='-':
         time=t-offset[0]
     else: time=t+delta
-    time=time.strftime("%m-%d %-I:%M %p")
-    print(time)
+    time=time.strftime("%m-%d %-I%M %p")
     if x['homeTeam']['abbrev']==teaminfo.teamAbv:
-        return "Next Game: "+ time[0:5] + " "+time[6:]+" Vs " + x['awayTeam']['abbrev']
+        return "Next Game "+ time[0:5] + " "+time[6:]+" Vs " + x['awayTeam']['abbrev']
     else:
-        return "Next Game: "+ time[0:5] + " "+time[6:]+" At " + x['homeTeam']['abbrev']
+        return "Next Game "+ time[0:5] + " "+time[6:]+" At " + x['homeTeam']['abbrev']
 def lastGame(x):
     if x['homeTeam']['abbrev']==teaminfo.teamAbv:
         favTeam=x['homeTeam']['abbrev']
@@ -40,11 +39,11 @@ def lastGame(x):
         favScore=x['awayTeam']['score']
         otherTeam=x['homeTeam']['abbrev']
         otherScore=x['homeTeam']['score']
-    if int(x['periodDesciptor']['number'])==4:
-        return "Last Game: "+"F-OT "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
-    elif int(x['periodDesciptor']['number'])==5:
-        return "Last Game: "+"F-SO "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
-    else: "Last Game: "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
+    if int(x['periodDescriptor']['number'])==4:
+        return "Last Game "+"F-OT "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
+    elif int(x['periodDescriptor']['number'])==5:
+        return "Last Game "+"F-SO "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
+    else: return "Last Game "+teaminfo.teamAbv+" "+str(favScore)+"  "+otherTeam+" "+str(otherScore)
 def gameProcessing(x):
     if x['homeTeam']['abbrev']==teaminfo.teamAbv:
         home=True
@@ -59,10 +58,10 @@ def gameProcessing(x):
         otherTeam=x['homeTeam']['abbrev']
         otherScore=x['homeTeam']['score']
     
-        time=x['clock']['timeRemaining']
-        period=x['periodDescriptor']['number']
-        gameState=x['gameState']
-        intermission=x['clock']['inIntermission']
+    time=x['clock']['timeRemaining']
+    period=x['periodDescriptor']['number']
+    gameState=x['gameState']
+    intermission=x['clock']['inIntermission']
     return home,favTeam,favScore,otherTeam,otherScore,time,period,gameState,intermission
 def control():
     x=gameDayCheck()
@@ -72,3 +71,4 @@ def control():
     if x0==0:
         return 0,gameProcessing(scoreboardCall(x2))
     else: return lastGame(scoreboardCall(x2)),nextGame(scoreboardCall(x1))
+    
