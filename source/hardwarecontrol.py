@@ -1,3 +1,4 @@
+#!/srv/nhl/nhlvirtual/bin/python
 from setup import boardcontrols
 boardcontrols=boardcontrols()
 import RPi.GPIO as GPIO
