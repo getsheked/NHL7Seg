@@ -1,3 +1,4 @@
+#!/srv/nhl/nhlvirtual/bin/python
 from setup import teaminfo
 from datetime import datetime
 import requests
