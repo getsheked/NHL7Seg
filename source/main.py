@@ -1,3 +1,4 @@
+#!/srv/nhl/nhlvirtual/bin/python
 #main.py
 import infogetter
 import hardwarecontrol
@@ -17,4 +18,5 @@ while 1<2:
        hardwarecontrol.clock(datetime.now().strftime("%H:%M"))
        hardwarecontrol.ledcontroller(0)
       
+
         
