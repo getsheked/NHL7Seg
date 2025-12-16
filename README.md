@@ -8,7 +8,7 @@ Setup:
       1d. Set your team
         Enter the team you want to track and show up on the scoreboard in the config files, these ids can also be seen in the team id json file in the source folder
            <details>
-           <summary> Team IDs and Abbrevations <summary>
+            <summary> Team IDs and Abbrevations List </summary>
             Anaheim Ducks: ANA 24
             Boston Bruins: BOS 6
             Buffalo Sabers: BUF 7
