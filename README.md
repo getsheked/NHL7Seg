@@ -1,19 +1,12 @@
 First off, thanks for checking this out. I dont know whats really happening with this, but in time I hope it can turn into something cool. I will add the schematics for assosiated pi and ciruits when I finish them, which will happen sometime. No promises on when. 
 
-
 Setup: 
-     
-      1. https://github.com/getsheked/NHL7Seg/blob/main/README.md
-     
-      2. Set if you want a 24hr or 12hr (AM/PM) clock. Set the paramater in config to 1 for 24hr and 0 for 12. 
-    
-      4. Setup Config Timezone
-        Enter the UTC (Coordinated Universal Time) offset. For North America, this is usually -5 for EST, -6 for CST, -7 for MST, and -8 for PST.
-        If you are in a different timezone, you can find your offset here: https://www.timeanddate.com/time/map/ 
-        Make sure to check for any daylight savings time changes, as these will affect your offset.
-      
-      5. Setup teams in config file. 
-        Enter the team you want to track and show up on the scoreboard in the config file. 
+    1.Set your config file:
+      1a. Set if you want a 24hr or 12hr (AM/PM) clock, on mine I am using a 7 segment display so I would reccomend just using a 24hr clock.
+      1b. Set if you want a 24hr or 12hr time for the games, for example "Next Game: MIN at DAL 5:00 PM" Or "Next Game MIN at DAL 1700"
+      1c. Set the date display, 0 for month-day or 1 for day-month
+      1d. Set your team
+        Enter the team you want to track and show up on the scoreboard in the config files, these ids can also be seen in the team id json file in the source folder
         Anaheim Ducks: ANA 24
         Boston Bruins: BOS 6
         Buffalo Sabers: BUF 7
@@ -46,8 +39,17 @@ Setup:
         Vegas Golden Knights: VGK 54
         Washington Capitals: WSH 15
         Winnipeg Jets: WPG 52
+     2. Create virutal enviroment
+     3. Install dependencies
+     4 (Optional). If you want this to run on boot you will need to do some more steps:
+          
         
-    6. Please report any issues you find with the program, there are likely many. 
+   
+    
+    
+    
+    
+    3. Please report any issues you find with the program, there are likely many. 
 
 This project relies on work fromm ADAFRUIT, and ZMALSKI. Thank you to both for your indirect assistance
 
