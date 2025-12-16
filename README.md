@@ -1,15 +1,16 @@
-First off, thanks for checking this out. I dont know whats really happening with this, but in time I hope it can turn into something cool. I will add the schematics for assosiated pi and ciruits when I finish them, which will happen sometime. No promises on when. 
+# Welcome to the NHL7Seg Project!
+Thanks for checking this out, it's not very much code nor very impressive, but I hope what I have done sparks some insperation for someone else and maybe acts as a starting point to build off from. Im not very good at python, so there are plenty of bugs, poorly witten syntax, optimization issues, etc. But I can promise eventually it will *mostly* work. If you want to work on it or copy it feel free, it is under an MIT license for that purpose. If you decide that you want to actaully use this for some reason, the steps to install it and the diagrams for the ciruit I created with the LEDs is shown below. -Getsheked
 
-Setup: 
-    1.Set your config file:
-      1a. Set if you want a 24hr or 12hr (AM/PM) clock, on mine I am using a 7 segment display so I would reccomend just using a 24hr clock.
-      1b. Set if you want a 24hr or 12hr time for the games, for example "Next Game: MIN at DAL 5:00 PM" Or "Next Game MIN at DAL 1700"
-      1c. Set the date display, 0 for month-day or 1 for day-month
-      1d. Set your team
-        Enter the team you want to track and show up on the scoreboard in the config files, these ids can also be seen in the team id json file in the source folder
-           <details>
-            <summary> Team IDs and Abbrevations List </summary>
-            
+## Setup Stage 1: Software:
+    
+#### Step 1: Configure Config file
+First you need to set up the config file. This infoms what team the scoreboard will track and other settings. This file can be found in source/config.ini. 
+* ##### Set Team ID
+  Look in the drop down table below to find your teams id and abbrevation, then enter these in the config file
+
+<details>
+<summary> Team IDs and Abbrevations List </summary> 
+    
 | Team Name     | Abbrevations  | ID    |
 | ------------- |:-------------:| -----:|
 | Anaheim Ducks      | ANA | 24 |
@@ -44,19 +45,7 @@ Vancouver Canucks |VAN |23|
 Vegas Golden Knights |VGK |54|
 Washington Capitals |WSH |15|
 Winnipeg Jets |WPG |52|
+</details>
   
-          </details>
-     2. Create virutal enviroment
-     3. Install dependencies
-     4 (Optional). If you want this to run on boot you will need to do some more steps:
-          
-        
-   
-    
-    
-    
-    
-    3. Please report any issues you find with the program, there are likely many. 
-
-This project relies on work fromm ADAFRUIT, and ZMALSKI. Thank you to both for your indirect assistance
-
+* ##### Set date and time formats
+    The program displays when a teams next game is, for example: "Next Game MIN at OTT 1-15 700 PM" You can choose if you want this to be month day like the example or day month, additionally you can chose if you want the     clock to be in 24 hour or not. To have the date be month-day put in D for the seconddigit value. For day-month you can put anything else in. For 12 hr time (am/pm) put in 12 for the 24hr value. Else, enter anything         else. Make sure you have something and dont have it empty otherwise it will throw an error
