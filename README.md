@@ -41,7 +41,7 @@ Setup:
             Vegas Golden Knights: VGK 54
             Washington Capitals: WSH 15
             Winnipeg Jets: WPG 52
-          <details>
+          </details>
      2. Create virutal enviroment
      3. Install dependencies
      4 (Optional). If you want this to run on boot you will need to do some more steps:
