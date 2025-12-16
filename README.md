@@ -10,9 +10,9 @@ Setup:
            <details>
             <summary> Team IDs and Abbrevations List </summary>
             
-            | Team                 |Abbrevation|ID      |
-            |----------------------|------------|-------|
-            | Anaheim Ducks        |            |       |
+            |Team|Abbrevation|ID|
+            |:---:|:---:|:---:|
+            |Anaheim Ducks|ANA|24|
             
             
             
