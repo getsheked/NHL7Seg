@@ -7,6 +7,8 @@ Setup:
       1c. Set the date display, 0 for month-day or 1 for day-month
       1d. Set your team
         Enter the team you want to track and show up on the scoreboard in the config files, these ids can also be seen in the team id json file in the source folder
+           <details>
+           <summary> Team IDs and Abbrevations <summary>
             Anaheim Ducks: ANA 24
             Boston Bruins: BOS 6
             Buffalo Sabers: BUF 7
@@ -39,6 +41,7 @@ Setup:
             Vegas Golden Knights: VGK 54
             Washington Capitals: WSH 15
             Winnipeg Jets: WPG 52
+          <details>
      2. Create virutal enviroment
      3. Install dependencies
      4 (Optional). If you want this to run on boot you will need to do some more steps:
