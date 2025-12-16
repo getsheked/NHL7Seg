@@ -20,7 +20,7 @@ Carolina Huricanes |CAR |12|
 Chicago Blackhawks |CHI |16|
 Colorado Avalanche |COL |21|
 Columbus Blue Jackets| CBJ |29|
-Dallas Stars|DAL 25|
+Dallas Stars|DAL |25|
 Detriot Red Wings |DET |17|
 Edmonton Oilers |EDM |22|
 Florida Panthers |FLA |13|
@@ -43,7 +43,7 @@ Utah Hockey Club |UTA |59|
 Vancouver Canucks |VAN |23|
 Vegas Golden Knights |VGK |54|
 Washington Capitals |WSH |15|
-Winnipeg Jets |WPG 52|
+Winnipeg Jets |WPG |52|
   
           </details>
      2. Create virutal enviroment
