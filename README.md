@@ -48,4 +48,4 @@ Winnipeg Jets |WPG |52|
 </details>
   
 * ##### Set date and time formats
-    The program displays when a teams next game is, for example: "Next Game MIN at OTT 1-15 700 PM" You can choose if you want this to be month day like the example or day month, additionally you can chose if you want the     clock to be in 24 hour or not. To have the date be month-day put in D for the seconddigit value. For day-month you can put anything else in. For 12 hr time (am/pm) put in 12 for the 24hr value. Else, enter anything         else. Make sure you have something and dont have it empty otherwise it will throw an error
+    The program displays when a teams next game is, for example: "Next Game MIN at OTT 1-15 700 PM" You can choose if you want this to be month day like the example or day month, additionally you can chose if you want the     clock to be in 24 hour or not. To have the date be month-day put in 1 for the seconddigit value. For day-month you can put anything else in. For 12 hr time (am/pm) put in 12 for the 24hr value. Else, enter anything         else. Make sure you have something and dont have it empty otherwise it will throw an error
